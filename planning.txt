@@ -1,0 +1,108 @@
+PROJECT: Snake Reinforcement Learning (PyTorch)
+
+GOAL:
+Train an AI agent to play the game Snake using reinforcement learning.
+The agent should learn to survive longer and maximize score without hardcoded rules.
+
+WHY THIS PROJECT:
+- Learn reinforcement learning fundamentals
+- Practice PyTorch in a real environment
+- Compare different RL models on the same task
+
+GAME DETAILS:
+- Game engine: Pygame
+- Grid-based Snake
+- Discrete actions (no continuous control)
+
+FRAMEWORKS / TOOLS:
+- Python
+- PyTorch
+- Pygame
+- NumPy
+
+MODEL:
+- Initial model: Deep Q-Network (DQN)
+- Input: state vector (danger, direction, food relative position)
+- Output: Q-values for 3 actions (straight, left, right)
+- Future models may be added for greater success
+
+FOLDER LAYOUT:
+snake-rl/
+├── planning.txt
+│
+├── src/
+│   ├── env/
+│   │   └── snake_env.py
+│   │
+│   ├── model.py
+│   ├── agent.py
+│   ├── replay_buffer.py
+│   └── config.py
+│
+├── train.py
+├── play.py
+│
+├── results/
+│   ├── scores.csv
+│   ├── evaluation.txt
+│   └── plots.png
+└── 
+
+FILES:
+- snake_env.py:
+  Implements the Snake game and exposes reset(), step(), and render()
+- model.py:
+  Defines the PyTorch neural network that approximates Q-values
+- agent.py:
+  Handles action selection, experience storage, and training updates
+- replay_buffer.py:
+  Stores past experiences and samples random minibatches
+- train.py:
+  Runs training episodes and saves trained models
+- play.py:
+  Loads a trained model and plays Snake visually
+
+SUCCESS METRIC:
+- Primary metric: average score (fruits eaten) over evaluation episodes
+- Secondary metric: maximum score achieved (beat game)
+
+ACTION SPACE:
+Discrete actions:
+0 = move straight
+1 = turn left
+2 = turn right
+
+STATE REPRESENTATION:
+- Danger straight (0 or 1)
+- Danger left (0 or 1)
+- Danger right (0 or 1)
+- Current direction (one-hot: left, right, up, down)
+- Food relative position (food left, right, up, down)
+
+REWARD DESIGN:
++10 for eating a fruit
+-10 for dying
+-0.01 per step to encourage efficient movement
+
+TERMINATION CONDITIONS:
+- Snake collides with wall
+- Snake collides with itself
+
+TRAINING STRATEGY:
+- Train without rendering for speed
+- Run for many episodes
+- Save best-performing model based on score
+- Periodically evaluate model without exploration
+
+MODEL SCOPE:
+Initial implementation will use a basic Deep Q-Network (DQN).
+More advanced models may be explored only after a working baseline is achieved.
+
+CONFIGURATION:
+All hyperparameters (learning rate, gamma, epsilon decay, batch size,
+grid size, etc.) will be stored in src/config.py.
+
+RESULTS & LOGGING:
+During training, episode scores will be logged to results/scores.csv.
+After training, evaluation statistics will be written to results/evaluation.txt.
+Learning curves will be plotted and saved as results/plots.png.
