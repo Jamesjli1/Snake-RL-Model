@@ -12,44 +12,54 @@ Designed to be used with Deep Q-Networks (DQN)
 Last Modified: December 31, 2025
 """
 
-# =========================
+"""
+TESTING STATUS: NOT YET VERIFIED
+
+Planned tests:
+- Create a temporary test file that:
+  - Opens the Pygame window
+  - Runs one episode
+  - Exits cleanly after death
+- Print state vector after each step to verify correctness
+- Print rewards to confirm reward structure:
+  - +10 for food
+  - -10 for death
+  - small negative step reward
+- Test edge cases:
+  - Wall collision
+  - Self collision
+  - Food spawning not on snake
+- Run multiple episodes sequentially to check reset logic
+- Verify rendering correctness and performance
+"""
+
+
 # Imports
-# =========================
 import pygame
 import random
 import numpy as np
 
 
-# =========================
 # Direction constants
-# =========================
 LEFT  = 0
 RIGHT = 1
 UP    = 2
 DOWN  = 3
 
 
-# =========================
 # Action constants
-# =========================
 STRAIGHT   = 0
 TURN_LEFT  = 1
 TURN_RIGHT = 2
 
 
-# =========================
 # Snake Environment Class
-# =========================
+# Contains all game logic and state management
 class SnakeEnv:
-    """
-    RL Environment containing all Snake game logic.
-    This class is fully decoupled from the learning algorithm.
-    """
-
+    # Function to initialize the environment
     def __init__(self, grid_size=9, render=False):
-        """
-        Initialize environment parameters and rendering settings
-        """
+        
+        # Rendering and grid settings
         self.grid_size = grid_size
         self.render_mode = render
 
@@ -57,6 +67,7 @@ class SnakeEnv:
         self.window_size = 630
         self.block_size = self.window_size // self.grid_size
 
+        # Window dimensions
         self.width = self.window_size
         self.height = self.window_size
 
@@ -77,16 +88,13 @@ class SnakeEnv:
         # Start first episode
         self.reset()
 
-
-    # =========================
-    # Core RL Methods
-    # =========================
+# Reset and Step are the main interaction methods
+    # Function to reset the environment meaning start a new episode
     def reset(self):
-        """
-        Reset the environment to initial state
-        """
+        # Reset game state
         mid = self.grid_size // 2
 
+        # Set variables to initial state
         self.direction = RIGHT
         self.score = 0
         self.done = False
@@ -98,16 +106,15 @@ class SnakeEnv:
             [3 * self.block_size, mid * self.block_size],
         ]
 
+        # Spawn initial food
         self.food = self._spawn_food()
         self.frame_iteration = 0
 
         return self.get_state()
 
-
+    # Function to apply an action and update the environment
     def step(self, action):
-        """
-        Apply an action and update environment
-        """
+        # Increment frame count
         self.frame_iteration += 1
 
         # Get new head position
@@ -134,17 +141,13 @@ class SnakeEnv:
 
         if self.render_mode:
             self.render()
-
+        # Return state, reward, done, score
         return self.get_state(), reward, self.done, self.score
 
 
-    # =========================
-    # Game Mechanics
-    # =========================
+# Collision, Spawn, Movement are game mechanics methods
+    # Function to check for collisions
     def _collision(self, head):
-        """
-        Check wall or self collision
-        """
         x, y = head
 
         # Wall collision
@@ -157,25 +160,21 @@ class SnakeEnv:
 
         return False
 
-
+    # Function to spawn food in an empty cell
     def _spawn_food(self):
-        """
-        Spawn food in empty grid cell
-        """
+        # Randomly place food not on the snake
         while True:
             x = random.randrange(self.grid_size) * self.block_size
             y = random.randrange(self.grid_size) * self.block_size
             if [x, y] not in self.snake:
                 return [x, y]
 
-
+    # Function to move the snake based on action
     def _move(self, action):
-        """
-        Update direction based on action and return new head position
-        """
         directions = [RIGHT, DOWN, LEFT, UP]
         idx = directions.index(self.direction)
 
+        # Update direction based on action
         if action == TURN_RIGHT:
             self.direction = directions[(idx + 1) % 4]
         elif action == TURN_LEFT:
@@ -183,6 +182,7 @@ class SnakeEnv:
 
         x, y = self.snake[-1]
 
+        # Calculate new head position
         if self.direction == RIGHT:
             x += self.block_size
         elif self.direction == LEFT:
@@ -195,26 +195,25 @@ class SnakeEnv:
         return [x, y]
 
 
-    # =========================
-    # State Representation
-    # =========================
+    # Function to get the current state representation
     def get_state(self):
-        """
-        Convert game state into numerical representation for the agent
-        """
+        # Get head position
         head = self.snake[-1]
         x, y = head
 
+        # Define adjacent positions
         left  = [x - self.block_size, y]
         right = [x + self.block_size, y]
         up    = [x, y - self.block_size]
         down  = [x, y + self.block_size]
 
+        # Direction flags
         dir_left  = self.direction == LEFT
         dir_right = self.direction == RIGHT
         dir_up    = self.direction == UP
         dir_down  = self.direction == DOWN
 
+        # Feature vector of 11 binary values
         state = [
             # Danger straight
             (dir_right and self._collision(right)) or
@@ -246,17 +245,12 @@ class SnakeEnv:
             self.food[1] < y,
             self.food[1] > y,
         ]
-
+        # Return as numpy array
         return np.array(state, dtype=int)
 
 
-    # =========================
-    # Rendering
-    # =========================
+    # Function to render the game state using pygame
     def render(self):
-        """
-        Draw the current game state using pygame
-        """
         self.display.fill(self.black)
 
         # Draw checkerboard grid
