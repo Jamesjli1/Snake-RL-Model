@@ -42,10 +42,13 @@ snake-rl/
 ├── train.py
 ├── play.py
 │
+├── models/                   
+│
+├── plots/                    
+│
 ├── results/
 │   ├── scores.csv
-│   ├── evaluation.txt
-│   └── plots.png
+│   └── evaluation.txt
 └── 
 
 FILES:
