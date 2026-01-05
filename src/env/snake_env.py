@@ -33,12 +33,10 @@ Planned tests:
 - Verify rendering correctness and performance
 """
 
-
 # Imports
 import pygame
 import random
 import numpy as np
-
 
 # Direction constants
 LEFT  = 0
@@ -46,12 +44,10 @@ RIGHT = 1
 UP    = 2
 DOWN  = 3
 
-
 # Action constants
 STRAIGHT   = 0
 TURN_LEFT  = 1
 TURN_RIGHT = 2
-
 
 # Snake Environment Class
 # Contains all game logic and state management
