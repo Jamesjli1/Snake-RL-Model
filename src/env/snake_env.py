@@ -247,6 +247,12 @@ class SnakeEnv:
 
     # Function to render the game state using pygame
     def render(self):
+        # Process pygame events
+        for event in pygame.event.get():  
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
         self.display.fill(self.black)
 
         # Draw checkerboard grid
