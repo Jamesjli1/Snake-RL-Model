@@ -15,6 +15,8 @@ Tests performed:
   - Wall collision
   - Self collision
   - Reset logic
+
+  Tested: January 6 2026
 """
 
 # Imports
