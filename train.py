@@ -20,7 +20,9 @@ Not finished:
 - Save model checkpoints periodically (10, 50, 100 games) in models/ directory
     - Not needed right now
 - Occasional rendering to visualize training progress
+    - made later in play.py
 - Store plots in files in plots/ directory
+    - done
 
 Last Modified: January 13 2026
 """
@@ -29,6 +31,8 @@ Last Modified: January 13 2026
 import matplotlib.pyplot as plt
 from collections import deque
 import numpy as np
+import os 
+from datetime import datetime
 
 # Local imports
 from src.env.snake_env import SnakeEnv
@@ -37,8 +41,11 @@ from src.agent import Agent
 # Set up live plotting
 plt.ion()
 
+# For unique run IDs
+RUN_ID = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
 # Function to plot scores
-def plot(scores, mean_scores):
+def plot(scores, mean_scores, save=False):
     plt.clf()
     plt.title("Snake DQN Training")
     plt.xlabel("Games")
@@ -50,6 +57,10 @@ def plot(scores, mean_scores):
     plt.legend()
     plt.ylim(ymin=0)
     plt.pause(0.001) # brief pause to update plot
+
+    if save :
+        os.makedirs("plots", exist_ok=True)
+        plt.savefig(f"plots/training_{RUN_ID}.png")
 
 # Main training function
 def train():
@@ -122,7 +133,8 @@ def train():
         )
 
         # Plot results
-        plot(scores, mean_scores)
+        save_plot = agent.n_games % 100 == 0        # Save plot every 100 games
+        plot(scores, mean_scores, save = save_plot)
         
 # Main entry point
 if __name__ == "__main__":
