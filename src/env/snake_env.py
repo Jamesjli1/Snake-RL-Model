@@ -82,6 +82,9 @@ class SnakeEnv:
             pygame.display.set_caption("Snake RL")
             self.clock = pygame.time.Clock()
 
+            # Font for displaying score
+            self.font = pygame.font.SysFont('arial', 25)
+
         # Start first episode
         self.reset()
 
@@ -245,6 +248,14 @@ class SnakeEnv:
         # Return as numpy array
         return np.array(state, dtype=int)
 
+    # Function to draw the current score on the screen
+    def _draw_score(self):
+        score_text = self.font.render(
+            f"Score: {self.score}",
+            True,
+            (255, 255, 255)
+        )
+        self.display.blit(score_text, (10, 10))
 
     # Function to render the game state using pygame
     def render(self):
@@ -284,5 +295,6 @@ class SnakeEnv:
                 (*segment, self.block_size, self.block_size)
             )
 
+        self._draw_score()
         pygame.display.update()
         self.clock.tick(15)

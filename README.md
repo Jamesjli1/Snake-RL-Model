@@ -14,7 +14,17 @@ The project is written entirely in **Python**, using **Pygame** for the environm
 ---
 
 ## Status 
-The agent is not yet training end-to-end. The next milestone is connecting the environment and agent in a training loop.
+The agent is now fully connected end-to-end with the environment and training loop. Agent can be rendered and observed.
+
+---
+
+### Current Limitations
+Agent frequently traps itself, leading to premature termination
+
+---
+
+### Next Milestone
+Tune epsilon decay, learning rate, and reward strucutre to improve performance. 
 
 ---
 

@@ -9,8 +9,9 @@ This file:
 - Logs the score for each run
 
 Later: 
-- Multiple runs 
 - Render while training
+    - In separate file or integrate into train.py
+- Show score on screen (in snake_env.py)
 - Choose which saved model to load
 - Screen record videos of agent performance
 
