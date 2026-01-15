@@ -18,6 +18,7 @@ Current Status: Working (verified with tests)
 Not finished:
 - Loading saved models for continued training
 - Save model checkpoints periodically (10, 50, 100 games) in models/ directory
+    - Not needed right now
 - Occasional rendering to visualize training progress
 - Store plots in files in plots/ directory
 

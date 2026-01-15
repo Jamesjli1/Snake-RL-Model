@@ -16,6 +16,7 @@ Last Modified: January 7 2026
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import numpy as np
 
 # Neural Network Model
 # Approximates Q-values for given states (Q(s,a))
@@ -60,9 +61,9 @@ class QTrainer:
     # Function to perform one training step
     def train_step(self, state, action, reward, next_state, done):
 
-        # Convert inputs to tensors
-        state = torch.tensor(state, dtype=torch.float)
-        next_state = torch.tensor(next_state, dtype=torch.float)
+        # Convert inputs to tensors (FAST)
+        state = torch.from_numpy(np.array(state, dtype=np.float32))
+        next_state = torch.from_numpy(np.array(next_state, dtype=np.float32))
         action = torch.tensor(action, dtype=torch.long)
         reward = torch.tensor(reward, dtype=torch.float)
 
