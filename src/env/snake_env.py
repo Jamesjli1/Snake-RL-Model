@@ -9,7 +9,7 @@ It provides:
 - render(): visualize the environment
 
 Designed to be used with Deep Q-Networks (DQN)
-Last Modified: December 31, 2025
+Last Modified: January 15, 2026
 """
 
 """

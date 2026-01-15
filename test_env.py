@@ -1,4 +1,5 @@
 """
+Author: James Li
 Temporary test file for SnakeEnv
 
 Purpose:

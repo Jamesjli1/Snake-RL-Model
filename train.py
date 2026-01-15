@@ -21,10 +21,8 @@ Not finished:
     - Not needed right now
 - Occasional rendering to visualize training progress
     - made later in play.py
-- Store plots in files in plots/ directory
-    - done
 
-Last Modified: January 13 2026
+Last Modified: January 14 2026
 """
 
 # Imports
