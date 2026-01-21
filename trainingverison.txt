@@ -1,0 +1,4 @@
+v1-2 original DESIGN
+v3 change epsilon from 0,80 to 5,200
+v4 increased step penalty, added survival reward, made danger flags for tight space 
+v5 distance to food shaping + anti-curl penalty 

@@ -81,7 +81,7 @@ class Agent:
     def get_action(self, state):
      
         # Exploration decreases as games increase
-        self.epsilon = max(0, 80 - self.n_games)
+        self.epsilon = max(5, 200 - self.n_games)
 
         final_move = [0, 0, 0] # [straight, left, right]
 

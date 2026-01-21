@@ -73,6 +73,7 @@ def train():
     mean_scores = []
     total_score = 0
     record = 0
+    MODEL_VERSION = "v5"
 
     # Training loop
     while True:
@@ -114,7 +115,7 @@ def train():
         # Save model if record beaten
         if score > record:
             record = score
-            agent.model.save("models/best_model.pth")
+            agent.model.save(f"models/best_{MODEL_VERSION}.pth")
 
         # Logging
         scores.append(score)

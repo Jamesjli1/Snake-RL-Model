@@ -128,7 +128,32 @@ class SnakeEnv:
         # Insert new head
         self.snake.append(new_head)
 
-        reward = -0.01  # step penalty
+        # Base step penalty
+        reward = -0.01 # from v1-v2
+
+        # v5 REWARD SHAPING
+        # Distance-based shaping (food guidance) 
+        head_x, head_y = self.snake[-2]   # previous head
+        new_x, new_y   = new_head
+        food_x, food_y = self.food
+
+        prev_dist = abs(head_x - food_x) + abs(head_y - food_y)
+        new_dist  = abs(new_x - food_x)  + abs(new_y - food_y)
+
+        if new_dist < prev_dist:
+            reward += 0.1   # moved closer to food
+        else:
+            reward -= 0.1   # moved away from food
+
+        # Inward curl penalty
+        adjacent_body = 0
+        for segment in self.snake[:-2]:
+            if abs(segment[0] - new_x) + abs(segment[1] - new_y) == self.block_size:
+                adjacent_body += 1
+
+        if adjacent_body >= 2:
+            reward -= 0.2
+        # End v5 REWARD SHAPING
 
         # Check food collision
         if new_head == self.food:
