@@ -34,7 +34,7 @@ def play():
     agent = Agent()
 
     # Load trained model
-    model_path = "models/best_v5.pth"
+    model_path = "models/best_v6.pth"
     agent.model.load_state_dict(torch.load(model_path))
     agent.model.eval()  # set model to evaluation mode
 

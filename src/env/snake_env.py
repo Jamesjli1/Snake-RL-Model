@@ -131,8 +131,7 @@ class SnakeEnv:
         # Base step penalty
         reward = -0.01 # from v1-v2
 
-        # v5 REWARD SHAPING
-        # Distance-based shaping (food guidance) 
+        # v5: Distance-based shaping (food guidance) 
         head_x, head_y = self.snake[-2]   # previous head
         new_x, new_y   = new_head
         food_x, food_y = self.food
@@ -153,7 +152,7 @@ class SnakeEnv:
 
         if adjacent_body >= 2:
             reward -= 0.2
-        # End v5 REWARD SHAPING
+        # v5 
 
         # Check food collision
         if new_head == self.food:
@@ -169,6 +168,41 @@ class SnakeEnv:
         # Return state, reward, done, score
         return self.get_state(), reward, self.done, self.score
 
+    # v6 helper: flood fill to count reachable empty cells
+    def _flood_fill(self, start):
+        stack = [start]
+        visited = set()
+        free_cells = 0
+
+        while stack:
+            x, y = stack.pop()
+            if (x, y) in visited:
+                continue
+            visited.add((x, y))
+
+            # Out of bounds
+            if x < 0 or x >= self.width or y < 0 or y >= self.height:
+                continue
+
+            # Collision
+            if [x, y] in self.snake:
+                continue
+
+            free_cells += 1
+
+            # Explore neighbors
+            stack.append((x + self.block_size, y))
+            stack.append((x - self.block_size, y))
+            stack.append((x, y + self.block_size))
+            stack.append((x, y - self.block_size))
+
+        return free_cells
+
+    # v6 helper: normalized free space from a position
+    def _free_space_ratio(self, position):
+        free_cells = self._flood_fill(position)
+        total_cells = self.grid_size * self.grid_size
+        return free_cells / total_cells
 
 # Collision, Spawn, Movement are game mechanics methods
     # Function to check for collisions
@@ -270,8 +304,13 @@ class SnakeEnv:
             self.food[1] < y,
             self.food[1] > y,
         ]
+        # v6: free space awareness
+        head = self.snake[-1]
+        free_space = self._free_space_ratio((head[0], head[1]))
+        state.append(free_space)
+
         # Return as numpy array
-        return np.array(state, dtype=int)
+        return np.array(state, dtype=float)
 
     # Function to draw the current score on the screen
     def _draw_score(self):

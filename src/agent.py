@@ -38,7 +38,7 @@ class Agent:
 
         # Model 
         self.model = LinearQNet(
-            input_size=11,     # state size from environment
+            input_size=12,     # state size from environment # 11 -> 12 for v6
             hidden_size=256,
             output_size=3      # [straight, left, right]
         )
