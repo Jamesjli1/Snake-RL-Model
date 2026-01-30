@@ -73,7 +73,7 @@ def train():
     mean_scores = []
     total_score = 0
     record = 0
-    MODEL_VERSION = "v6" # Update model version as needed
+    MODEL_VERSION = "v7" # Update model version as needed
 
     # Training loop
     while True:

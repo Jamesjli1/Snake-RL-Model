@@ -163,6 +163,42 @@ class SnakeEnv:
             # Remove tail if no food eaten
             self.snake.pop(0)
 
+        # v7 Lookahead space evaluation
+        space_scores = []
+
+        # Test the 3 possible actions left right straight
+        for test_action in [0, 1, 2]:
+            sim_head = self._move(test_action)
+
+            # Skip impossible moves
+            if self._collision(sim_head):
+                space_scores.append(0)
+                continue
+
+            # Simulate snake after that move
+            sim_snake = self.snake.copy()
+            sim_snake.append(sim_head)
+
+            if sim_head != self.food:
+                sim_snake.pop(0)
+
+            # Temporarily replace snake for flood fill
+            original_snake = self.snake
+            self.snake = sim_snake
+
+            space = self._flood_fill(sim_head)
+            space_scores.append(space)
+
+            self.snake = original_snake
+
+        best_space = max(space_scores)
+        chosen_space = space_scores[action]
+
+        # Penalize moves that reduce future space
+        reward -= (best_space - chosen_space) * 0.002
+        # end v7
+
+        # Render if enabled
         if self.render_mode:
             self.render()
         # Return state, reward, done, score
@@ -174,6 +210,7 @@ class SnakeEnv:
         visited = set()
         free_cells = 0
 
+        # Flood fill algorithm
         while stack:
             x, y = stack.pop()
             if (x, y) in visited:
